@@ -4,7 +4,8 @@ import { storage } from "./storage";
 import { appgFileSchema, type APPGFile } from "@shared/schema";
 import { realAppgFiles } from "./data/appg-files";
 
-export async function registerRoutes(app: Express): Promise<Server> {
+// Function to register routes only (for Vercel)
+export async function setupRoutes(app: Express): Promise<void> {
   // Get real APPG data
   app.get("/api/sample-data", async (req, res) => {
     try {
@@ -37,7 +38,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: error.message });
     }
   });
+}
 
+// Function to register routes and create HTTP server (for local development)
+export async function registerRoutes(app: Express): Promise<Server> {
+  await setupRoutes(app);
   const httpServer = createServer(app);
   return httpServer;
 }
