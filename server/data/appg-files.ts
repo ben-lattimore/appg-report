@@ -5,7 +5,11 @@ import type { APPGFile } from '@shared/schema';
 // Load the provided JSON files
 const loadAppgFile = (filename: string): APPGFile => {
   try {
-    const filePath = join(process.cwd(), 'attached_assets', filename);
+    // For Vercel deployment, attached_assets is copied to dist/attached_assets
+    const basePath = process.env.VERCEL 
+      ? join(__dirname, 'attached_assets')
+      : join(process.cwd(), 'attached_assets');
+    const filePath = join(basePath, filename);
     const fileContent = readFileSync(filePath, 'utf-8');
     const data = JSON.parse(fileContent);
     
@@ -27,7 +31,11 @@ const loadAppgFile = (filename: string): APPGFile => {
     };
   } catch (error) {
     console.error(`Error loading file ${filename}:`, error);
-    throw new Error(`Failed to load ${filename}`);
+    console.error(`Attempted path: ${basePath}`);
+    console.error(`Full file path: ${filePath}`);
+    console.error(`Current working directory: ${process.cwd()}`);
+    console.error(`__dirname: ${__dirname}`);
+    throw new Error(`Failed to load ${filename}: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 };
 

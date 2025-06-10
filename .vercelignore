@@ -53,4 +53,4 @@ jspm_packages/
 replit.nix
 
 # Development only files
-attached_assets/
+# attached_assets/ - We need this directory for data files
