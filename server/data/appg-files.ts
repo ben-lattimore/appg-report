@@ -7,7 +7,7 @@ const loadAppgFile = (filename: string): APPGFile => {
   try {
     // For Vercel deployment, attached_assets is copied to dist/attached_assets
     const basePath = process.env.VERCEL 
-      ? join(__dirname, 'attached_assets')
+      ? join(process.cwd(), 'dist/attached_assets')
       : join(process.cwd(), 'attached_assets');
     const filePath = join(basePath, filename);
     const fileContent = readFileSync(filePath, 'utf-8');
@@ -31,8 +31,6 @@ const loadAppgFile = (filename: string): APPGFile => {
     };
   } catch (error) {
     console.error(`Error loading file ${filename}:`, error);
-    console.error(`Attempted path: ${basePath}`);
-    console.error(`Full file path: ${filePath}`);
     console.error(`Current working directory: ${process.cwd()}`);
     console.error(`__dirname: ${__dirname}`);
     throw new Error(`Failed to load ${filename}: ${error instanceof Error ? error.message : 'Unknown error'}`);
